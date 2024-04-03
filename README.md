@@ -18,5 +18,5 @@ When running the image, the default configuration is stored in /docker/*. Everyt
 Running:
 
 ```console
-$ docker-compose up -d
+$ docker compose up -d
 ```
