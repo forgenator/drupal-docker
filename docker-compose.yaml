@@ -1,28 +1,5 @@
 services:
-  
-  mysql:
-    image: mariadb:latest
-    container_name: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: unless-stopped
-    env_file: ./docker/mysql/.env
-    volumes:
-      - db-data:/var/lib/mysql
-    networks:
-      - internal
-        
-  drupal:
-    build: docker/phpfpm
-    container_name: drupal
-    depends_on:
-      - mysql
-    restart: unless-stopped
-    networks:
-      - internal
-      - external
-    volumes:
-      - ./app:/var/www/html
-  
+
   webserver:
     image: nginx:1.17.4-alpine
     container_name: webserver
@@ -37,6 +14,29 @@ services:
       - ./docker/certbot:/etc/letsencrypt
     networks:
       - external
+  
+  drupal:
+    build: docker/phpfpm
+    container_name: drupal
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    networks:
+      - internal
+      - external
+    volumes:
+      - ./app:/var/www/html
+
+  mysql:
+    image: mariadb:latest
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - internal
   
   certbot:
     depends_on:
